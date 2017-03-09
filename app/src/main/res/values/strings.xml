@@ -49,5 +49,11 @@
     <string name="action_sub_last15">Last 15 days</string>
     <string name="action_sub_month">Last Month</string>
     <string name="action_show_values">Show Values</string>
+    <string name="stock">Stock</string>
+    <string name="error_not_found">not found</string>
+    <string name="symbol">symbol</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="plus_sign">+</string>
 
 </resources>

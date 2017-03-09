@@ -1,11 +1,14 @@
 package com.udacity.stockhawk.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -25,6 +28,8 @@ import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
 import com.udacity.stockhawk.sync.QuoteSyncJob;
+import com.udacity.stockhawk.widget.CollectionWidget;
+import com.udacity.stockhawk.widget.WidgetDataProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         StockAdapter.StockAdapterOnClickHandler {
 
     private static final int STOCK_LOADER = 0;
+
+
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.recycler_view)
     RecyclerView stockRecyclerView;
@@ -153,6 +160,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             error.setVisibility(View.GONE);
         }
         adapter.setCursor(data);
+        updateWidget();
+
+    }
+
+    private void updateWidget() {
+        AppWidgetManager manager = AppWidgetManager.getInstance(this);
+        int appWidgetIds[] = manager.getAppWidgetIds(new ComponentName(this, CollectionWidget.class));
+        manager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list);
     }
 
 
@@ -192,4 +207,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

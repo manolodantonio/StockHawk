@@ -8,9 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.design.widget.Snackbar;
+import android.widget.Toast;
 
+import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.ui.MainActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,10 +43,12 @@ public final class QuoteSyncJob {
     private static final int PERIODIC_ID = 1;
     private static final int YEARS_OF_HISTORY = 2;
 
+
+
     private QuoteSyncJob() {
     }
 
-    static void getQuotes(Context context) {
+    static void getQuotes(final Context context) {
 
         Timber.d("Running sync job");
 
@@ -69,11 +77,34 @@ public final class QuoteSyncJob {
             ArrayList<ContentValues> quoteCVs = new ArrayList<>();
 
             while (iterator.hasNext()) {
-                String symbol = iterator.next();
+                final String symbol = iterator.next();
 
 
                 Stock stock = quotes.get(symbol);
                 StockQuote quote = stock.getQuote();
+
+                // on symbol not found, remove it from prefs and go to next iteration
+                if (quote.getPrice() == null) {
+                    PrefUtils.removeStock(context, symbol);
+
+                    // Handler to run the toast on the main thread
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast toast = Toast.makeText(context.getApplicationContext(),
+                                            symbol
+                                            + " "
+                                            + context.getString(R.string.symbol)
+                                            + " "
+                                            + context.getString(R.string.error_not_found)
+                                    , Toast.LENGTH_LONG );
+                            toast.show();
+                        }
+                    });
+
+                    continue;
+                }
 
                 float price = quote.getPrice().floatValue();
                 float change = quote.getChange().floatValue();
@@ -137,7 +168,6 @@ public final class QuoteSyncJob {
 
 
     public static synchronized void initialize(final Context context) {
-
         schedulePeriodic(context);
         syncImmediately(context);
 
