@@ -66,14 +66,16 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         String symbol = mCursor.getString(Contract.Quote.POSITION_SYMBOL);
         view.setTextViewText(R.id.tv_widget_item_symbol, symbol);
         view.setTextViewText(R.id.tv_widget_item_price,
-                mCursor.getString(Contract.Quote.POSITION_PRICE));
+                context.getString(R.string.dollar_sign)
+                + mCursor.getString(Contract.Quote.POSITION_PRICE));
 
         float percentageChange = mCursor.getFloat(Contract.Quote.POSITION_PERCENTAGE_CHANGE);
         if (percentageChange > 0) {
             view.setTextViewText(R.id.tv_widget_item_change,
-                    context.getString(R.string.plus_sign) + percentageChange);
+                    context.getString(R.string.plus_sign) + percentageChange + context.getString(R.string.percent_sign));
         } else {
-            view.setTextViewText(R.id.tv_widget_item_change, String.valueOf(percentageChange));
+            view.setTextViewText(R.id.tv_widget_item_change,
+                    String.valueOf(percentageChange) + context.getString(R.string.percent_sign));
         }
 
         // fill onClick intent template (CollectionWidget.class) with actual data
