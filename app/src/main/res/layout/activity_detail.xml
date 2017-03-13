@@ -36,6 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
+                    android:textSize="@dimen/text_normal"
                     android:paddingBottom="@dimen/content_margin_mid"
                     tools:text="-132 / -100"/>
 

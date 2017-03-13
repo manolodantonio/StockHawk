@@ -206,13 +206,16 @@ public final class PrefUtils {
         String absoluteChange;
         if (absolute > 0) {
             absoluteChange = context.getString(R.string.plus_sign) + context.getString(R.string.dollar_sign) + absolute;
-        } else absoluteChange = String.valueOf(absolute);
+        } else {
+            absoluteChange = String.valueOf(absolute).replace("-", "");
+            absoluteChange = context.getString(R.string.minus_sign) + context.getString(R.string.dollar_sign) + absoluteChange;
+        }
 
         double percentage = Double.parseDouble(cursor.getString(Contract.Quote.POSITION_PERCENTAGE_CHANGE));
         String percentageChange;
         if (percentage > 0) {
             percentageChange = context.getString(R.string.plus_sign) + percentage + context.getString(R.string.percent_sign);
-        } else percentageChange = String.valueOf(percentage);
+        } else percentageChange = String.valueOf(percentage) + context.getString(R.string.percent_sign);
 
         return new QuoteObject(
                 cursor.getString(Contract.Quote.POSITION_SYMBOL),

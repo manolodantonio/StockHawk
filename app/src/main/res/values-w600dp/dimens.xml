@@ -1,0 +1,43 @@
+<resources>
+    <!--PADDING-->
+    <dimen name="content_padding_xsmall">6dp</dimen>
+    <dimen name="content_padding_small">10dp</dimen>
+    <dimen name="content_padding_mid">16dp</dimen>
+    <dimen name="content_padding_large">30dp</dimen>
+    <dimen name="content_padding_xlarge">42dp</dimen>
+
+    <!--MARGIN-->
+    <dimen name="content_margin_xsmall">12dp</dimen>
+    <dimen name="content_margin_small">30dp</dimen>
+    <dimen name="content_margin_mid">20dp</dimen>
+    <dimen name="content_margin_large">48dp</dimen>
+
+    <!--VIEWS-->
+    <dimen name="activity_horizontal_margin">48dp</dimen>
+    <dimen name="activity_vertical_margin">32dp</dimen>
+    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="chart_height">750dp</dimen>
+
+    <!--HEADER-->
+    <dimen name="header_margin_large">40dp</dimen>
+    <dimen name="header_topmargin">48dp</dimen>
+
+    <!--FAB-->
+    <dimen name="fab_margin">56dp</dimen>
+    <dimen name="elevation_mid">10dp</dimen>
+    <dimen name="translation_mid">18dp</dimen>
+
+    <!--WIDGET-->
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_header_padding">8dp</dimen>
+
+    <!--TEXT-->
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="text_header">32sp</dimen>
+    <dimen name="text_normal">28sp</dimen>
+    <dimen name="text_item_title">50sp</dimen>
+
+    <!--PILLS-->
+    <dimen name="radius_pill">16dp</dimen>
+
+</resources>

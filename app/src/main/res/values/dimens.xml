@@ -1,26 +1,45 @@
 <resources>
+    <!--PADDING-->
     <dimen name="content_padding_xsmall">3dp</dimen>
     <dimen name="content_padding_small">6dp</dimen>
     <dimen name="content_padding_mid">12dp</dimen>
     <dimen name="content_padding_large">15dp</dimen>
     <dimen name="content_padding_xlarge">24dp</dimen>
 
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <!--MARGIN-->
+    <dimen name="content_margin_xsmall">4dp</dimen>
     <dimen name="content_margin_small">8dp</dimen>
     <dimen name="content_margin_mid">16dp</dimen>
     <dimen name="content_margin_large">24dp</dimen>
-    <dimen name="header_margin_large">40dp</dimen>
-    <dimen name="header_topmargin">78dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
-    <dimen name="app_bar_height">200dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
 
-    <!--
-Refer to App Widget Documentation for margin information
-http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
-    -->
+    <!--VIEWS-->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="chart_height">350dp</dimen>
+
+    <!--HEADER-->
+    <dimen name="header_margin_large">40dp</dimen>
+    <dimen name="header_topmargin">72dp</dimen>
+
+    <!--FAB-->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="elevation_mid">6dp</dimen>
+    <dimen name="translation_mid">12dp</dimen>
+
+   <!--WIDGET-->
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="widget_header_padding">8dp</dimen>
+
+    <!--TEXT-->
+    <dimen name="text_margin">16dp</dimen>
     <dimen name="text_header">26sp</dimen>
+    <dimen name="text_item_title">25sp</dimen>
+    <dimen name="text_normal">20sp</dimen>
+    <dimen name="text_small">16sp</dimen>
+
+    <!--PILLS-->
+    <dimen name="radius_pill">4dp</dimen>
+
+
 </resources>

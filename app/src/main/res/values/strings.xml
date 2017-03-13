@@ -62,5 +62,6 @@
     <string name="insert_stock_symbol">Insert stock symbol</string>
     <string name="dollar_sign" translatable="false">$</string>
     <string name="percent_sign" translatable="false">%</string>
+    <string name="minus_sign">-</string>
 
 </resources>

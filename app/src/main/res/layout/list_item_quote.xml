@@ -2,11 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingStart="@dimen/content_padding_mid"
+    android:paddingEnd="@dimen/content_padding_mid"
+    android:paddingTop="@dimen/content_padding_large"
+    android:paddingBottom="@dimen/content_padding_large">
 
     <TextView
         android:id="@+id/symbol"
@@ -27,7 +29,7 @@
             style="@style/BidPriceTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10sp"
+            android:layout_marginEnd="@dimen/content_margin_small"
             tools:text="1000.00" />
 
         <TextView
@@ -36,8 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/percent_change_pill_green"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
+            android:paddingStart="@dimen/content_padding_xsmall"
+            android:paddingEnd="@dimen/content_padding_xsmall"
             tools:text="100%" />
     </LinearLayout>
 </LinearLayout>

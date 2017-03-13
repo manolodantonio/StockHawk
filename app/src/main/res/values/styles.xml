@@ -7,17 +7,17 @@
     </style>
 
     <style name="PercentChangeTextStyle">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/text_normal</item>
         <item name="android:textColor">#FFF</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="BidPriceTextStyle">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/text_normal</item>
     </style>
 
     <style name="StockSymbolTextStyle">
-        <item name="android:textSize">25sp</item>
+        <item name="android:textSize">@dimen/text_item_title</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
@@ -28,5 +28,7 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
+
+
 </resources>
