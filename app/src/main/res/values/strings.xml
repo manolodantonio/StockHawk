@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Stock Hawk</string>
 
+    <!--INTENT KEYS-->
+
+    <string name="intent_key_symbol" translatable="false">intent symbol</string>
 
     <!--PREFERENCES-->
     <string name="pref_stocks_initialized_key" translatable="false">initialized</string>
@@ -20,12 +23,12 @@
     <string name="default_stocks_facebook" translatable="false">FB</string>
 
     <string name="pref_history_key" translatable="false">history timeframe</string>
-    <string name="pref_history_val_5day" translatable="false">last 5 days</string>
-    <string name="pref_history_val_15day" translatable="false">history 15 days</string>
-    <string name="pref_history_val_month" translatable="false">history last month</string>
+    <string name="pref_history_key_5day" translatable="false">last 5 days</string>
+    <string name="pref_history_key_15day" translatable="false">history 15 days</string>
+    <string name="pref_history_key_month" translatable="false">history last month</string>
 
-    <!--GENERAL-->
     <string name="action_change_units" translatable="false">@string/pref_display_mode_key</string>
+    <!--GENERAL-->
 
 
     <string name="dialog_title">Add Stock</string>
@@ -39,7 +42,6 @@
     <string name="toast_stock_added_no_connectivity">Symbol %s added. Will refresh when network available.</string>
     <string name="toast_no_connectivity">Will refresh when network available.</string>
     <string name="history">History</string>
-    <string name="intent_key_symbol">intent symbol</string>
     <string name="title_activity_stock_detail">StockDetailActivity</string>
 
     <string name="title_activity_detail">DetailActivity</string>
@@ -52,8 +54,13 @@
     <string name="stock">Stock</string>
     <string name="error_not_found">not found</string>
     <string name="symbol">symbol</string>
-    <string name="appwidget_text">EXAMPLE</string>
+    <string name="appwidget_text">@string/app_name</string>
     <string name="add_widget">Add widget</string>
-    <string name="plus_sign">+</string>
+    <string name="plus_sign" translatable="false">+</string>
+    <string name="error_no_stocks_widget">No stocks added!</string>
+    <string name="add_new_stock">Tap to add a new stock to the list.</string>
+    <string name="insert_stock_symbol">Insert stock symbol</string>
+    <string name="dollar_sign" translatable="false">$</string>
+    <string name="percent_sign" translatable="false">%</string>
 
 </resources>

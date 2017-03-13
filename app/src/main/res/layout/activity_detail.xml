@@ -22,7 +22,32 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end|bottom"
+                android:gravity="end|top"
+                android:paddingTop="@dimen/header_topmargin"
+                android:layout_marginEnd="@dimen/header_margin_large">
 
+                <TextView
+                    android:id="@+id/tv_detail_change"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
+                    android:paddingBottom="@dimen/content_margin_mid"
+                    tools:text="-132 / -100"/>
+
+                <TextView
+                    android:id="@+id/tv_detail_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:textSize="@dimen/text_header"
+                    tools:text="1000.00" />
+
+            </LinearLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -36,13 +61,6 @@
 
     <include layout="@layout/content_scrolling" />
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--app:layout_anchor="@id/app_bar"-->
-        <!--app:layout_anchorGravity="bottom|end"-->
-        <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
+
 
 </android.support.design.widget.CoordinatorLayout>

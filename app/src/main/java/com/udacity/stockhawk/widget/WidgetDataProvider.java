@@ -59,7 +59,7 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         // inflate
         RemoteViews view = new RemoteViews(
                 context.getPackageName(),
-                R.layout.item_widget_stocks //todo: insert item layout here
+                R.layout.item_widget_stocks
         );
 
         // populate

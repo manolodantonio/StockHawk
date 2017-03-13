@@ -1,8 +1,12 @@
 package com.udacity.stockhawk.ui;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -21,12 +26,13 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.PrefUtils;
+import com.udacity.stockhawk.data.QuoteObject;
 
 import java.util.List;
 
 
 public class DetailActivity extends AppCompatActivity
-        implements PrefUtils.HistoryCompletedListener,
+        implements PrefUtils.StockRequestListener,
         View.OnClickListener{
 
 
@@ -34,7 +40,7 @@ public class DetailActivity extends AppCompatActivity
     private String currentHistoryPref;
     private String symbol;
     private AppCompatCheckBox accb_showLabels;
-    private Spinner sp_timeframe;
+    private QuoteObject currentObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +52,12 @@ public class DetailActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(symbol);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(symbol);
+        }
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         // Chart
         chart = (LineChart)findViewById(R.id.lcv_chart);
@@ -66,23 +67,23 @@ public class DetailActivity extends AppCompatActivity
         accb_showLabels = (AppCompatCheckBox)findViewById(R.id.accb_showlabels);
         accb_showLabels.setOnClickListener(this);
 
-        sp_timeframe = (Spinner) findViewById(R.id.sp_timeframe);
+        final Spinner sp_timeframe = (Spinner) findViewById(R.id.sp_timeframe);
         sp_timeframe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                String selectedSortOrder = null;
+                String selectedSortOrder;
                 switch (pos) {
                     case 0:
-                        selectedSortOrder = getString(R.string.pref_history_val_5day);
+                        selectedSortOrder = getString(R.string.pref_history_key_5day);
                         break;
                     case 1:
-                        selectedSortOrder = getString(R.string.pref_history_val_15day);
+                        selectedSortOrder = getString(R.string.pref_history_key_15day);
                         break;
                     case 2:
-                        selectedSortOrder = getString(R.string.pref_history_val_month);
+                        selectedSortOrder = getString(R.string.pref_history_key_month);
                         break;
                     default:
-                        selectedSortOrder = getString(R.string.pref_history_val_5day);
+                        selectedSortOrder = getString(R.string.pref_history_key_5day);
                         break;
                 }
 
@@ -91,7 +92,7 @@ public class DetailActivity extends AppCompatActivity
                         getString(R.string.pref_history_key), selectedSortOrder)
                         .commit();
 
-                getHistoryData();
+                getStockData();
             }
 
             @Override
@@ -103,13 +104,45 @@ public class DetailActivity extends AppCompatActivity
 
 
         // Get history
-        getHistoryData();
+        getStockData();
 
 
     }
 
+    private void setAppBarLayout() {
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        assert appBarLayout != null;
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    String title = currentObject.getSymbol() + " "
+                            + currentObject.getPrice() + " / "
+                            + currentObject.getAbsoluteChange() + " / "
+                            + currentObject.getPercentageChange();
+                    collapsingToolbarLayout.setTitle(title);
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle(currentObject.getSymbol());
+                    isShow = false;
+                }
+            }
+        });
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            appBarLayout.setExpanded(false);
+        }
+    }
+
     private void setupChart() {
-        chart.setDragEnabled(false);
+        chart.setTouchEnabled(false);
         chart.getLegend().setEnabled(false);
         chart.setDescription(null);
         chart.setNestedScrollingEnabled(true);
@@ -123,14 +156,7 @@ public class DetailActivity extends AppCompatActivity
         xAxis.setTextSize(8);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
-//        final String[] formatValues = PrefUtils.getLast30Days(); //Todo get Last x days
-//        xAxis.setValueFormatter( new IAxisValueFormatter() {
-//                @Override
-//                public String getFormattedValue(float value, AxisBase axis) {
-//                    return formatValues[(int)value];
-//                }
-//            }
-//        );
+
 
 
 
@@ -144,26 +170,48 @@ public class DetailActivity extends AppCompatActivity
         chart.getAxisRight().setDrawAxisLine(false);
     }
 
-    public void getHistoryData() {
+    public void getStockData() {
         currentHistoryPref = PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(getString(R.string.pref_history_key), getString(R.string.pref_history_val_5day));
-        new PrefUtils.GetSymbolHistory(this, this).execute(symbol);
+                .getString(getString(R.string.pref_history_key), getString(R.string.pref_history_key_5day));
+        new PrefUtils.GetStockFromSymbol(this, this).execute(symbol);
 
     }
 
     @Override
-    public void onHistoryCompleted(String result) {
+    public void onStockRequestCompleted(QuoteObject result) {
+        currentObject = result;
+        setAppBarLayout();
 
-        List<Entry> entries = PrefUtils.stringToEntryList(result, currentHistoryPref, this);
+        populateChart(result.getHistory());
 
-        final String[] formatValues = PrefUtils.getLastXDays(entries.size()); //Todo get Last x days
+        ((TextView)findViewById(R.id.tv_detail_price))
+                .setText(result.getPrice());
+
+
+
+
+
+        ((TextView)findViewById(R.id.tv_detail_change))
+                .setText(
+                        result.getAbsoluteChange() +
+                        " / " +
+                        result.getPercentageChange()
+                );
+
+
+    }
+
+    private void populateChart(String history) {
+        List<Entry> entries = PrefUtils.stringToEntryList(history, currentHistoryPref, this);
+
+        final String[] formatValues = PrefUtils.getLastXDays(entries.size());
         chart.getXAxis().setLabelCount(5);
         chart.getXAxis().setValueFormatter( new IAxisValueFormatter() {
-                                     @Override
-                                     public String getFormattedValue(float value, AxisBase axis) {
-                                         return formatValues[(int)value];
-                                     }
-                                 }
+                                                @Override
+                                                public String getFormattedValue(float value, AxisBase axis) {
+                                                    return formatValues[(int)value];
+                                                }
+                                            }
         );
 
 
@@ -181,16 +229,11 @@ public class DetailActivity extends AppCompatActivity
         chart.notifyDataSetChanged();
         chart.invalidate();
         setLabelsStatus();
-
-//        chart.animateX(2000);
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_scrolling, menu);
         return true;
     }
 
@@ -199,7 +242,7 @@ public class DetailActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+//        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_settings) {
@@ -209,31 +252,6 @@ public class DetailActivity extends AppCompatActivity
     }
 
 
-    public void onSubMenuItemClicked(MenuItem item) {
-        String selectedSortOrder = null;
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_last5:
-                selectedSortOrder = getString(R.string.pref_history_val_5day);
-                break;
-            case R.id.action_last15:
-                selectedSortOrder = getString(R.string.pref_history_val_15day);
-                break;
-            case R.id.action_last_month:
-                selectedSortOrder = getString(R.string.pref_history_val_month);
-                break;
-            default:
-                selectedSortOrder = getString(R.string.pref_history_val_5day);
-                break;
-        }
-
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .edit().putString(
-                getString(R.string.pref_history_key), selectedSortOrder)
-                .commit();
-
-        getHistoryData();
-    }
 
     @Override
     public void onClick(View view) {
@@ -242,6 +260,7 @@ public class DetailActivity extends AppCompatActivity
             case R.id.accb_showlabels:
                 setLabelsStatus();
                 return;
+            default: return;
         }
     }
 

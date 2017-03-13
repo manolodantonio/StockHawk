@@ -1,4 +1,5 @@
 <resources>
+    <dimen name="content_padding_xsmall">3dp</dimen>
     <dimen name="content_padding_small">6dp</dimen>
     <dimen name="content_padding_mid">12dp</dimen>
     <dimen name="content_padding_large">15dp</dimen>
@@ -6,7 +7,11 @@
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="content_margin_small">8dp</dimen>
     <dimen name="content_margin_mid">16dp</dimen>
+    <dimen name="content_margin_large">24dp</dimen>
+    <dimen name="header_margin_large">40dp</dimen>
+    <dimen name="header_topmargin">78dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="app_bar_height">200dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
@@ -17,4 +22,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="widget_header_padding">8dp</dimen>
+    <dimen name="text_header">26sp</dimen>
 </resources>

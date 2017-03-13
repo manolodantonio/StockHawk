@@ -100,20 +100,23 @@ public final class PrefUtils {
 
     public static List<Entry> stringToEntryList(String entriesString, String currentHistoryPref, Context context) {
         List<Entry> resultList = new ArrayList<>(0);
-        int i = -1;
-        if (currentHistoryPref.equals(context.getString(R.string.pref_history_val_5day))){
-            i = 4;}
-        else if (currentHistoryPref.equals(context.getString(R.string.pref_history_val_15day))) {
-            i = 14;}
-        else if (currentHistoryPref.equals(context.getString(R.string.pref_history_val_month))) {
-            i= 29;}
+        int maxLenght = 0;
+        if (currentHistoryPref.equals(context.getString(R.string.pref_history_key_5day))){
+            maxLenght = 5;}
+        else if (currentHistoryPref.equals(context.getString(R.string.pref_history_key_15day))) {
+            maxLenght = 15;}
+        else if (currentHistoryPref.equals(context.getString(R.string.pref_history_key_month))) {
+            maxLenght= 30;}
 
         String[] entriesSplit = entriesString.split("\n");
-        if (entriesSplit.length < i) {
-            i = entriesSplit.length;}
-        for (; i >= 0; i--) {
+
+        if (entriesSplit.length < maxLenght) {
+            maxLenght = entriesSplit.length;}
+
+        int reverseIterator = maxLenght - 1;
+        for (int i = 0; i < maxLenght; i++) {
             String[] subsplit = entriesSplit[i].split(", ");
-            resultList.add(new Entry( (float) i , Float.parseFloat(subsplit[1])));
+            resultList.add(new Entry( (float) reverseIterator-- , Float.parseFloat(subsplit[1])));
         }
 
 
@@ -134,38 +137,90 @@ public final class PrefUtils {
 
     }
 
-    public static class GetSymbolHistory extends AsyncTask<String, Void, String > {
-        private Context context;
-        private HistoryCompletedListener historyCompletedListener;
+//    public static class GetSymbolHistory extends AsyncTask<String, Void, String > {
+//        private Context context;
+//        private StockRequestListener stockRequestListener;
+//
+//        public GetSymbolHistory(Context context, StockRequestListener stockRequestListener) {
+//            this.context = context;
+//            this.stockRequestListener = stockRequestListener;
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... symbols) {
+//            String result = "";
+//            Uri uri = Contract.Quote.makeUriForStock(symbols[0]);
+//            Cursor cursor = context.getContentResolver().query(uri,
+//                    null, null, null, null);
+//            if (cursor != null) {
+//                cursor.moveToFirst();
+//                result += cursor.getString(Contract.Quote.POSITION_HISTORY);
+//            }
+//
+//            return result;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+//            super.onPostExecute(result);
+//            stockRequestListener.onStockRequestCompleted(result);
+//        }
+//    }
 
-        public GetSymbolHistory(Context context, HistoryCompletedListener historyCompletedListener) {
+    public static class GetStockFromSymbol extends AsyncTask<String, Void, QuoteObject > {
+        private Context context;
+        private StockRequestListener stockRequestListener;
+
+        public GetStockFromSymbol(Context context, StockRequestListener stockRequestListener) {
             this.context = context;
-            this.historyCompletedListener = historyCompletedListener;
+            this.stockRequestListener = stockRequestListener;
         }
 
         @Override
-        protected String doInBackground(String... symbols) {
-            String result = "";
+        protected QuoteObject doInBackground(String... symbols) {
+
             Uri uri = Contract.Quote.makeUriForStock(symbols[0]);
             Cursor cursor = context.getContentResolver().query(uri,
                     null, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                result += cursor.getString(Contract.Quote.POSITION_HISTORY);
-            }
-
-            return result;
+            if (cursor.moveToFirst()) {
+                return cursorToQuoteObject(cursor, context);
+            } else return null;
         }
 
+
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(QuoteObject result) {
             super.onPostExecute(result);
-            historyCompletedListener.onHistoryCompleted(result);
+            stockRequestListener.onStockRequestCompleted(result);
         }
     }
 
-    public interface HistoryCompletedListener {
-        void onHistoryCompleted(String result);
+    public interface StockRequestListener {
+        void onStockRequestCompleted(QuoteObject result);
+    }
+
+
+    public static QuoteObject cursorToQuoteObject(Cursor cursor, Context context) {
+
+        double absolute = Double.parseDouble(cursor.getString(Contract.Quote.POSITION_ABSOLUTE_CHANGE));
+        String absoluteChange;
+        if (absolute > 0) {
+            absoluteChange = context.getString(R.string.plus_sign) + context.getString(R.string.dollar_sign) + absolute;
+        } else absoluteChange = String.valueOf(absolute);
+
+        double percentage = Double.parseDouble(cursor.getString(Contract.Quote.POSITION_PERCENTAGE_CHANGE));
+        String percentageChange;
+        if (percentage > 0) {
+            percentageChange = context.getString(R.string.plus_sign) + percentage + context.getString(R.string.percent_sign);
+        } else percentageChange = String.valueOf(percentage);
+
+        return new QuoteObject(
+                cursor.getString(Contract.Quote.POSITION_SYMBOL),
+                context.getString(R.string.dollar_sign) + cursor.getString(Contract.Quote.POSITION_PRICE),
+                absoluteChange,
+                percentageChange,
+                cursor.getString(Contract.Quote.POSITION_HISTORY)
+                );
     }
 
 }

@@ -38,6 +38,9 @@ public class CollectionWidget extends AppWidgetProvider {
                 .addNextIntentWithParentStack(clickIntentTemplate)
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.widget_list, clickPendingIntentTemplate);
+        views.setEmptyView(R.id.widget_list, R.id.widget_empty);
+
+
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
